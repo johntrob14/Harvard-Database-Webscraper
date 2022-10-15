@@ -1,5 +1,4 @@
 # This is a sample Python script.
-import pyautogui
 import requests
 import csv
 from bs4 import BeautifulSoup
@@ -38,16 +37,13 @@ def parse_coding_sequence(html_text, i):
 
     print(data)
     return data
-
-
-    # this is the final piece to finish, I need to parse the html file and make sure I only get the strings of nucleotides
-    # this should also remove all spaces in the strings so that they are one large continuous stream of nucleotide bases
+    # this is the final piece to finish, I need to parse the html file and make sure I only get the strings of
+    # nucleotides this should also remove all spaces in the strings so that they are one large continuous stream of
+    # nucleotide bases
 
 
 # scrape will eventually use beautiful soup to extract all text from the html and parse the html for a row of values.
 # the values will be returned as an array of strings which will be written by the write function
-
-
 
 def scrape(s):
     soup = BeautifulSoup(requests.get(s).content, 'html.parser')
