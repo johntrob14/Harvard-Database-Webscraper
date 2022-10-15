@@ -29,6 +29,16 @@ def main():
 
 
 def parse_coding_sequence(html_text, i):
+    data = ''
+    while len(html_text[i]) != 0:
+        for n in range(len(html_text[i].split())):
+            if n > 0 & n < len(html_text[i].split()) - 1:
+                data += html_text[i].split()[n]
+        i += 1
+
+    print(data)
+    return data
+
 
     # this is the final piece to finish, I need to parse the html file and make sure I only get the strings of nucleotides
     # this should also remove all spaces in the strings so that they are one large continuous stream of nucleotide bases
@@ -62,7 +72,7 @@ def scrape(s):
             data.append(all_html[i + 3])
             data.append(all_html[i + 4])
         elif x == 'Location in Coding Sequence (primers and amplicon highlighted)':
-            x = parse_coding_sequence(all_html, i)
+            x = parse_coding_sequence(all_html, i + 4)
             data.append(x)
         i += 1
 
