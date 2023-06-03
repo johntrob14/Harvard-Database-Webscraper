@@ -1,0 +1,26 @@
+name: scraper
+channels:
+  - defaults
+dependencies:
+  - bzip2
+  - ca-certificates
+  - libffi
+  - openssl
+  - pip=23.0.1
+  - python=3.10.11
+  - setuptools=66.0.0
+  - sqlite
+  - tk
+  - tzdata
+  - wheel
+  - xz
+  - zlib
+  - pip:
+      - beautifulsoup4==4.12.2
+      - certifi==2023.5.7
+      - charset-normalizer==3.1.0
+      - idna==3.4
+      - requests==2.30.0
+      - soupsieve==2.4.1
+      - urllib3==2.0.2
+prefix: c:\Users\johnt\Desktop\ML Stuff\scraper\.conda
