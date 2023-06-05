@@ -7,10 +7,10 @@ import itertools
 
 # a basic csv row writer function
 def write(s, file):
-    with open(file, 'w') as f:
+    with open(file, 'a') as f:
         # create the csv writer
         writer = csv.writer(f, lineterminator='\n')
-        writer.writerows(s)
+        writer.writerow(s)
         # write a row to the csv file
 
 
@@ -20,19 +20,31 @@ def main():
               'RPrimer', 'RPrimer length', 'FPrimer tm', 'RPrimer location', 'Coding Sequence', 'Validation Results']
     #with open("toScrape.txt", 'r') as f:
       #  IDs = f.readlines() 
-    IDs = generate_IDs()
-    big_array = [header]
+      # Deprecated - formerly attempting to only scrape known IDs
+    
+    max_length = 6 #Maximum String length of ID to search for
+    for len in range(1,max_length):
+        IDs = generate_IDs(len)
+        write(IDs, "IDs.csv")
+        print(IDs)
+       
+    write(header, file="scrape_all_entries.csv")
     count = 1
-    for x in IDs:
-        url = "https://pga.mgh.harvard.edu/cgi-bin/primerbank/new_displayDetail2.cgi?primerID=" + x.strip()
-        soup = BeautifulSoup(requests.get(url).content, 'html.parser')
-        all_html = soup.get_text()
-        if ("No primer pair is found for" not in all_html):
-            data = scrape(url, x.strip(), count)
-            count += 1
-            big_array.append(data)
-        
-    write(big_array, file="scrape_all_entries.csv")
+    with open(file="IDs.csv") as f:
+        reader = csv.reader(f, lineterminator='\n')
+        IDs  = reader.__next__()
+        for x in IDs:
+            url = "https://pga.mgh.harvard.edu/cgi-bin/primerbank/new_displayDetail2.cgi?primerID=" + x.strip()
+            print("Trying: " + url)
+            soup = BeautifulSoup(requests.get(url).content, 'html.parser')
+            all_html = soup.get_text()
+            if ("No primer pair is found for" not in all_html):
+                print("PrimerID Found")
+                data = scrape(url, x.strip(), count)
+                count += 1
+                write(data, file="scrape_all_entries.csv")
+            else:
+                print("Failed")
 
 
 def parse_coding_sequence(html_text, i):
@@ -114,16 +126,15 @@ def scrape(s, primer_id, count):
 
     return data
 
-def generate_IDs():
+def generate_IDs(len):
     IDs = []
     # possible = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z','0','1','2','3','4','5','6','7','8','9']
     # possible = 'abcdefghijklmnopqrstuvwxyz0123456789'
     possible = ['a','b','c','0','1','2','3','4','5','6','7','8','9']
-    for len in range(15):
-        new = itertools.product(possible, repeat=len)
-        for combo in new:
-            IDs.append(''.join(combo))
-            print(''.join(combo))
+    new = itertools.product(possible, repeat=len)
+    for combo in new:
+        IDs.append(''.join(combo))
+        print(''.join(combo))
             
             
     return IDs
